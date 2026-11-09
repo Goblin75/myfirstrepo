@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  enterprise-verifier:
+    build: .
+    ports:
+      - "8443:8443"
+    environment:
+      - SERVICE_ID=snap-enterprise-verifier-v4
+      - DEPLOYMENT_REGION=eu-central-1
+      - COMPLIANCE_FRAMEWORK=GDPR2026:ISO27001:2025
+      - SESSION_KEY=${SESSION_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET}
+      - RATE_LIMIT_PER_MINUTE=60
+      - ENABLE_SENTRY=true
+    volumes:
+      - ./certs:/app/certs:ro
+      - ./logs:/var/log/enterprise-auth
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8443/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
