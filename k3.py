@@ -49,7 +49,6 @@ logging.basicConfig(
     format='%(asctime)s | %(levelname)s | %(module)s | %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler('/var/log/enterprise-auth/service.log')
     ]
 )
 
